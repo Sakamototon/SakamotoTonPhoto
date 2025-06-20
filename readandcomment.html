@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>日記閲覧＆コメントページ</title>
+<style>
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 1rem 2rem;
+    background-color: #fefefe;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+  h1, h2 {
+    text-align: center;
+    color: #34495e;
+  }
+  .post {
+    background: #ecf0f1;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border-radius: 8px;
+    white-space: pre-wrap;
+  }
+  .post-header {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+  }
+  .replies {
+    margin-top: 0.8rem;
+    padding-left: 1rem;
+    border-left: 3px solid #27ae60;
+  }
+  .reply {
+    background: #d0f0d0;
+    padding: 0.5rem 0.8rem;
+    margin-bottom: 0.5rem;
+    border-radius: 6px;
+    white-space: pre-wrap;
+  }
+  .reply.admin {
+    background: #f9e79f;
+    border-left: 4px solid #f1c40f;
+  }
+  .reply-header {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #145214;
+    margin-bottom: 0.3rem;
+  }
+  .reply-header.admin {
+    color: #b9770e;
+  }
+  .reply-form {
+    margin-top: 0.5rem;
+  }
+  textarea {
+    width: 100%;
+    height: 60px;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    resize: vertical;
+  }
+  button {
+    margin-top: 0.3rem;
+    padding: 0.6rem 1rem;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #1e8449;
+  }
+  .admin-btn {
+    background-color: #f1c40f;
+    color: #7d6608;
+    margin-left: 0.5rem;
+  }
+  .admin-btn:hover {
+    background-color: #d4ac0d;
+  }
+  .logout-btn {
+    display: block;
+    margin: 0 auto 1rem auto;
+    padding: 0.5rem 1.2rem;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    max-width: 150px;
+  }
+  .logout-btn:hover {
+    background-color: #c0392b;
+  }
+</style>
+</head>
+<body>
+
+<button class="logout-btn" onclick="logout()">ログアウト</button>
+
+<h1>日記閲覧＆コメントページ</h1>
+<h2>ユーザー: <span id="userName"></span></h2>
+
+<section id="postsSection">
+  <h2>過去の日記</h2>
+  <div id="postsList"></div>
+</section>
+
+<script>
+  const POSTS_KEY = 'diary_posts';
+  const USER_KEY = 'diary_user';
+  const ADMIN_USER = 'sakamototon';
+
+  // ユーザー名取得（URLパラメータ→localStorage→デフォルト）
+  function getUser() {
+    const params = new URLSearchParams(location.search);
+    let user = params.get('user');
+    if (user) {
+      localStorage.setItem(USER_KEY, user);
+    } else {
+      user = localStorage.getItem(USER_KEY) || 'ゲスト';
+    }
+    return user;
+  }
+
+  const user = getUser();
+  document.getElementById('userName').textContent = user;
+
+  // 簡易ID生成
+  function generateId() {
+    return 'id-' + Math.random().toString(36).substr(2, 9);
+  }
+
+  // 投稿読み込み。postIdとrepliesがなければ初期化
+  function loadPosts() {
+    const raw = localStorage.getItem(POSTS_KEY);
+    if (!raw) return [];
+
+    let posts = JSON.parse(raw);
+
+    let updated = false;
+    posts.forEach(post => {
+      if (!post.postId) {
+        post.postId = generateId();
+        updated = true;
+      }
+      if (!post.replies) {
+        post.replies = [];
+        updated = true;
+      }
+      if (!post.adminReplies) {
+        post.adminReplies = [];
+        updated = true;
+      }
+    });
+    if (updated) {
+      localStorage.setItem(POSTS_KEY, JSON.stringify(posts));
+    }
+    return posts;
+  }
+
+  // 投稿保存
+  function savePosts(posts) {
+    localStorage.setItem(POSTS_KEY, JSON.stringify(posts));
+  }
+
+  // コメント追加（一般コメント）
+  function addReply(postId, replyContent, textarea) {
+    if (!replyContent.trim()) {
+      alert('コメント内容を入力してください。');
+      return;
+    }
+    if (!user || user === 'ゲスト') {
+      alert('ユーザー名が設定されていません。ログインし直してください。');
+      return;
+    }
+    const posts = loadPosts();
+    const post = posts.find(p => p.postId === postId);
+    if (!post) {
+      alert('投稿が見つかりません。');
+      return;
+    }
+    if (!post.replies) {
+      post.replies = [];
+    }
+    post.replies.push({
+      user: user,
+      date: new Date().toLocaleString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }),
+      content: replyContent.trim()
+    });
+    savePosts(posts);
+    renderPosts();
+    if(textarea) {
+      textarea.value = '';
+    }
+  }
+
+  // 管理者コメント追加
+  function addAdminReply(postId, replyContent, textarea) {
+    if (user !== ADMIN_USER) {
+      alert('管理者のみがコメントできます。');
+      return;
+    }
+    if (!replyContent.trim()) {
+      alert('コメント内容を入力してください。');
+      return;
+    }
+    const posts = loadPosts();
+    const post = posts.find(p => p.postId === postId);
+    if (!post) {
+      alert('投稿が見つかりません。');
+      return;
+    }
+    if (!post.adminReplies) {
+      post.adminReplies = [];
+    }
+    post.adminReplies.push({
+      user: user,
+      date: new Date().toLocaleString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }),
+      content: replyContent.trim()
+    });
+    savePosts(posts);
+    renderPosts();
+    if(textarea) {
+      textarea.value = '';
+    }
+  }
+
+  // 投稿＆コメント表示
+  function renderPosts() {
+    const posts = loadPosts();
+    const container = document.getElementById('postsList');
+    container.innerHTML = '';
+
+    if (posts.length === 0) {
+      container.textContent = 'まだ投稿がありません。';
+      return;
+    }
+
+    posts.slice().reverse().forEach(post => {
+      const postDiv = document.createElement('div');
+      postDiv.className = 'post';
+
+      // 投稿本文
+      const header = document.createElement('div');
+      header.className = 'post-header';
+      header.textContent = `[${post.date}] ${post.user}:`;
+      postDiv.appendChild(header);
+
+      const content = document.createElement('div');
+      content.textContent = post.content;
+      postDiv.appendChild(content);
+
+      // コメント一覧
+      const repliesDiv = document.createElement('div');
+      repliesDiv.className = 'replies';
+
+      let hasComments = false;
+
+      // 管理者コメント表示
+      if (post.adminReplies && post.adminReplies.length > 0) {
+        post.adminReplies.forEach(reply => {
+          hasComments = true;
+          const replyDiv = document.createElement('div');
+          replyDiv.className = 'reply admin';
+
+          const replyHeader = document.createElement('div');
+          replyHeader.className = 'reply-header admin';
+          replyHeader.textContent = `[${reply.date}] 管理者コメント (${reply.user}):`;
+          replyDiv.appendChild(replyHeader);
+
+          const replyContent = document.createElement('div');
+          replyContent.textContent = reply.content;
+          replyDiv.appendChild(replyContent);
+
+          repliesDiv.appendChild(replyDiv);
+        });
+      }
+
+      // 通常コメント表示
+      if (post.replies && post.replies.length > 0) {
+        post.replies.forEach(reply => {
+          hasComments = true;
+          const replyDiv = document.createElement('div');
+          replyDiv.className = 'reply';
+
+          const replyHeader = document.createElement('div');
+          replyHeader.className = 'reply-header';
+          replyHeader.textContent = `[${reply.date}] ${reply.user} のコメント:`;
+          replyDiv.appendChild(replyHeader);
+
+          const replyContent = document.createElement('div');
+          replyContent.textContent = reply.content;
+          replyDiv.appendChild(replyContent);
+
+          repliesDiv.appendChild(replyDiv);
+        });
+      }
+
+      if (!hasComments) {
+        const noReply = document.createElement('div');
+        noReply.textContent = 'コメントはまだありません。';
+        repliesDiv.appendChild(noReply);
+      }
+
+      postDiv.appendChild(repliesDiv);
+
+      // コメント入力フォーム（通常コメント）
+      const formDiv = document.createElement('div');
+      formDiv.className = 'reply-form';
+
+      const textarea = document.createElement('textarea');
+      textarea.placeholder = 'コメントを書く...';
+      formDiv.appendChild(textarea);
+
+      const btn = document.createElement('button');
+      btn.textContent = 'コメント投稿';
+      btn.onclick = () => {
+        addReply(post.postId, textarea.value, textarea);
+      };
+      formDiv.appendChild(btn);
+
+      // 管理者用コメント投稿ボタン（管理者のみ表示）
+      if (user === ADMIN_USER) {
+        const adminBtn = document.createElement('button');
+        adminBtn.className = 'admin-btn';
+        adminBtn.textContent = '管理者コメント投稿';
+        adminBtn.onclick = () => {
+          addAdminReply(post.postId, textarea.value, textarea);
+        };
+        formDiv.appendChild(adminBtn);
+      }
+
+      postDiv.appendChild(formDiv);
+
+      container.appendChild(postDiv);
+    });
+  }
+
+  // ログアウト処理
+  function logout() {
+    localStorage.removeItem(USER_KEY);
+    location.href = 'login.html';
+  }
+
+  // 初回表示
+  renderPosts();
+</script>
+
+</body>
+</html>
