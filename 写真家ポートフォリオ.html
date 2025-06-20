@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio - 坂本トン</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Noto Sans JP', sans-serif;
+      color: #333;
+      background-color: #f4f4f8;
+      line-height: 1.8;
+    }
+
+    header {
+      background-color: #fff;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin: 0;
+    }
+
+    nav a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: #555;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #000;
+    }
+
+    .hero {
+      background-image: url('https://source.unsplash.com/1600x600/?photography,nature');
+      background-size: cover;
+      background-position: center;
+      height: 60vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-shadow: 0 0 10px rgba(0,0,0,0.4);
+      animation: fadeIn 2s ease;
+    }
+
+    .hero h2 {
+      font-size: 3rem;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .section {
+      max-width: 1000px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+      animation: fadeUp 1s ease both;
+    }
+
+    .section h3 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 0.5rem;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    /* 初期状態は透明＆少し下にずらす */
+    .gallery img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      will-change: transform;
+      cursor: pointer;
+    }
+
+    /* visibleクラスでフェードイン＋上昇 */
+    .gallery img.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ホバー時は拡大＆影増し */
+    .gallery img:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+      z-index: 10;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #777;
+      background-color: #fff;
+      border-top: 1px solid #e0e0e0;
+      margin-top: 4rem;
+    }
+
+    /* 既存のアニメーションは不要なので削除可能 */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>坂本トン</h1>
+    <nav>
+      <a href="#portfolio">ポートフォリオ</a>
+      <a href="#about">プロフィール</a>
+      <a href="#contact">お問い合わせ</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2>ただ、そこにある美しさを。</h2>
+  </section>
+
+  <section class="section" id="portfolio">
+    <h3>ポートフォリオ</h3>
+    <div class="gallery">
+      <!-- あなたの画像 -->
+      <img src="Leaf_Tokyo_Shibuya_Hikawa_Shrine.png" alt="Leaf in Hikawa Shrine" />
+   <img src="Enoshima_Pic.png" alt="Enoshima" />
+   <img src="Enoshima_Cat.png" alt="normal cat " />
+
+      <!-- 他の画像 -->
+      <img src="https://source.unsplash.com/600x400/?landscape" alt="Landscape" />
+      <img src="https://source.unsplash.com/600x400/?city" alt="City" />
+      <img src="https://source.unsplash.com/600x400/?portrait" alt="Portrait" />
+      <img src="https://source.unsplash.com/600x400/?night" alt="Night" />
+      <img src="https://source.unsplash.com/600x400/?street" alt="Street" />
+      <img src="https://source.unsplash.com/600x400/?travel" alt="Travel" />
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <h3>プロフィール</h3>
+    <p>
+      坂本トン（Sakamoto Ton）は東京を拠点に活動するフリーランス写真家です。<br>
+      日常の中に潜む静かな美しさを切り取ることを得意とし、ポートレートやストリート、風景写真を中心に活動しています。
+    </p>
+  </section>
+
+  <section class="section" id="contact">
+    <h3>お問い合わせ</h3>
+    <p>
+      📧 Email: <a href="mailto:sakamototon@outlook.jp">sakamototon@outlook.jp</a><br />
+      📷 Instagram: <a href="https://instagram.com/sakamoto_photo122" target="_blank">@sakamoto_photo122</a><br />
+      🌐 Web: www.sakamototon.com（※仮URL）
+    </p>
+  </section>
+
+  <footer>
+    &copy; 2025 坂本トン - All rights reserved.
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const images = document.querySelectorAll('.gallery img');
+      const observerOptions = {
+        threshold: 0.1
+      };
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      images.forEach(img => {
+        observer.observe(img);
+      });
+    });
+  </script>
+</body>
+</html>
