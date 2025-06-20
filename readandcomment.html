@@ -1,6 +1,41 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+/*改装中メッセ*/
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.body.innerHTML = `
+      <div style="
+        max-width: 500px;
+        margin: auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        font-family: 'Noto Sans JP', sans-serif;
+        color: #37474f;
+        text-align: center;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      ">
+        <h1 style="font-size: 2rem; margin-bottom: 1rem; color: #00796b;">ブログ改装中</h1>
+        <p style="font-size: 1.1rem; line-height: 1.6;">
+          ただいまブログをより見やすくするために<br>
+          改装作業を行っております。
+        </p>
+        <p style="font-size: 0.95rem; color: #78909c; margin-top: 1.5rem;">
+          公開予定：2025年?月頃を予定しています。<br>
+          ご不便をおかけいたしますが、しばらくお待ちください。
+        </p>
+        <footer style="margin-top: 2rem; font-size: 0.9rem; color: #90a4ae;">&copy; 2025 坂本トン</footer>
+      </div>
+    `;
+  });
+</script>
+
+
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>日記閲覧＆コメントページ</title>
