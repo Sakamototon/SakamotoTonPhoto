@@ -2,57 +2,135 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>プロフィール - 坂本トン</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Playfair+Display&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
   <style>
     body {
-      font-family: 'Noto Sans JP', sans-serif;
-      background-color: #f9f9fb;
-      color: #333;
       margin: 0;
-      padding: 2rem;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      font-family: 'Noto Sans JP', sans-serif;
+      color: #2c3e50;
+      line-height: 1.75;
+      min-height: 100vh;
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      justify-content: center;
+      padding: 3rem 1rem;
+    }
+
+    main {
+      max-width: 720px;
+      background: white;
+      padding: 3rem 3rem 4rem 3rem;
+      border-radius: 16px;
+      box-shadow: 0 15px 30px rgba(44, 62, 80, 0.15);
+      animation: fadeSlideUp 1s ease forwards;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    @keyframes fadeSlideUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     h1 {
-      font-size: 2.2rem;
-      margin-bottom: 1.5rem;
       font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 3rem;
+      margin: 0 0 1rem 0;
+      border-bottom: 3px solid #3498db;
+      padding-bottom: 0.25rem;
+      color: #34495e;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .profile-img {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 2rem auto;
+      display: block;
+      box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      cursor: default;
+    }
+
+    .profile-img:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 28px rgba(52, 152, 219, 0.5);
     }
 
     p {
-      max-width: 600px;
-      line-height: 1.8;
       font-size: 1.1rem;
-      margin-bottom: 2rem;
-      text-align: center;
+      margin-top: 0;
+      margin-bottom: 1.6rem;
+      color: #34495e;
     }
 
-    a.back-link {
+    a.contact-link {
       display: inline-block;
-      padding: 0.6rem 1.2rem;
-      background-color: #333;
-      color: #fff;
-      border-radius: 5px;
+      color: #2980b9;
+      font-weight: 600;
       text-decoration: none;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
+      position: relative;
+      transition: color 0.3s ease;
+      padding-bottom: 3px;
+      border-bottom: 2px solid transparent;
     }
 
-    a.back-link:hover {
-      background-color: #000;
+    a.contact-link:hover {
+      color: #1c5980;
+      border-color: #1c5980;
+    }
+
+    a.contact-link::after {
+      content: '↗';
+      margin-left: 6px;
+      font-size: 1.1rem;
+      transition: transform 0.3s ease;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    a.contact-link:hover::after {
+      transform: translateX(4px);
+    }
+
+    footer {
+      margin-top: 4rem;
+      text-align: center;
+      color: #7f8c8d;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
-  <h1>プロフィール</h1>
-  <p>
-    坂本トン（Sakamoto Ton）は東京を拠点に活動するフリーランス写真家です。<br>
-    日常の中に潜む静かな美しさを切り取ることを得意とし、ポートレートやストリート、風景写真を中心に活動しています。
-  </p>
-    <a href="index.html" class="back-link">← トップページに戻る</a>
+  <main>
+    <h1>プロフィール</h1>
+    <img src="https://source.unsplash.com/180x180/?portrait,face" alt="坂本トンのプロフィール写真" class="profile-img" />
+    <p>
+      坂本トン（Sakamoto Ton）は東京を拠点に活動するフリーランス写真家です。日常の中に潜む静かな美しさを切り取ることを得意とし、ポートレートやストリート、風景写真を中心に活動しています。
+    </p>
+    <p>
+      目の前にある小さな瞬間を、ただ大切に写す。それだけで、日常が少し特別になる気がしています。
+    </p>
+    <p>
+      ご依頼やお問い合わせは以下までお気軽にどうぞ。
+    </p>
+    <p>
+      📧 <a href="mailto:sakamototon@outlook.jp" target="_blank" class="contact-link">sakamototon@outlook.jp</a><br />
+      🌐 <a href="https://sakamototon.github.io/SakamotoTonPhoto/" target="_blank" class="contact-link">公式サイト</a><br />
+      📷 <a href="https://instagram.com/sakamoto_photo122" target="_blank" class="contact-link">Instagram @sakamoto_photo122</a>
+    </p>
+  </main>
+
+  <footer>
+    &copy; 2025 坂本トン
+  </footer>
 </body>
 </html>
