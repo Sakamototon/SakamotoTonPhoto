@@ -48,14 +48,15 @@
       text-transform: uppercase;
     }
 
+    /* ここが画像の円形＆影のスタイル */
     .profile-img {
       width: 180px;
       height: 180px;
-      border-radius: 50%;
+      border-radius: 50%;         /* 円形に */
       object-fit: cover;
       margin: 2rem auto;
       display: block;
-      box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+      box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3); /* 青みのある影 */
       transition: transform 0.4s ease, box-shadow 0.4s ease;
       cursor: default;
     }
@@ -132,7 +133,8 @@
 <body>
   <main>
     <h1>プロフィール</h1>
-    <img src="https://github.com/Sakamototon/SakamotoTonPhoto/raw/main/hatena.png" alt="プロフィール画像">
+    <!-- ここに class="profile-img" を追加 -->
+    <img src="https://github.com/Sakamototon/SakamotoTonPhoto/raw/main/hatena.png" alt="プロフィール画像" class="profile-img">
     <p>
       坂本トン（Sakamoto Ton）は東京を拠点に活動するフリーランス写真家です。日常の中に潜む静かな美しさを切り取ることを得意とし、ポートレートやストリート、風景写真を中心に活動しています。
     </p>
