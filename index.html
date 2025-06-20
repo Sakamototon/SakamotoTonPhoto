@@ -30,8 +30,23 @@
 
     header h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 2rem;
+      font-size: 2.8rem;         /* 大きめに */
       margin: 0;
+      color: #2c3e50;            /* 濃いブルーグレー */
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-shadow:
+        2px 2px 4px rgba(0,0,0,0.1),
+        0 0 6px #3498db;
+      transition: color 0.3s ease;
+      cursor: default;
+    }
+
+    header h1:hover {
+      color: #3498db;
+      text-shadow:
+        2px 2px 6px rgba(0,0,0,0.15),
+        0 0 12px #2980b9;
     }
 
     nav a {
@@ -86,7 +101,6 @@
       margin-top: 2rem;
     }
 
-    /* 初期状態は透明＆少し下にずらす */
     .gallery img {
       width: 100%;
       height: auto;
@@ -99,13 +113,11 @@
       cursor: pointer;
     }
 
-    /* visibleクラスでフェードイン＋上昇 */
     .gallery img.visible {
       opacity: 1;
       transform: translateY(0);
     }
 
-    /* ホバー時は拡大＆影増し */
     .gallery img:hover {
       transform: scale(1.1);
       box-shadow: 0 12px 40px rgba(0,0,0,0.3);
@@ -121,7 +133,6 @@
       margin-top: 4rem;
     }
 
-    /* 既存のアニメーションは不要なので削除可能 */
     @keyframes fadeUp {
       from {
         opacity: 0;
@@ -147,10 +158,10 @@
   <header>
     <h1>坂本トン</h1>
     <nav>
-  <a href="#portfolio">ポートフォリオ</a>
-  <a href="about.html">プロフィール</a> <!-- ←ここ -->
- <a href="contact.html" target="_blank">お問い合わせ</a>
-</nav>
+      <a href="#portfolio">ポートフォリオ</a>
+      <a href="about.html">プロフィール</a>
+      <a href="contact.html" target="_blank">お問い合わせ</a>
+    </nav>
   </header>
 
   <section class="hero">
@@ -160,12 +171,9 @@
   <section class="section" id="portfolio">
     <h3>ポートフォリオ</h3>
     <div class="gallery">
-      <!-- あなたの画像 -->
       <img src="Leaf_Tokyo_Shibuya_Hikawa_Shrine.png" alt="Leaf in Hikawa Shrine" />
-   <img src="Enoshima_Pic.png" alt="Enoshima" />
-   <img src="Enoshima_Cat.png" alt="normal cat " />
-
-      <!-- 他の画像 -->
+      <img src="Enoshima_Pic.png" alt="Enoshima" />
+      <img src="Enoshima_Cat.png" alt="normal cat " />
       <img src="https://source.unsplash.com/600x400/?landscape" alt="Landscape" />
       <img src="https://source.unsplash.com/600x400/?city" alt="City" />
       <img src="https://source.unsplash.com/600x400/?portrait" alt="Portrait" />
@@ -186,7 +194,7 @@
   <section class="section" id="contact">
     <h3>お問い合わせ</h3>
     <p>
-     📧 Email: <a href="mailto:sakamototon@outlook.jp" target="_blank">sakamototon@outlook.jp</a><br />
+      📧 Email: <a href="mailto:sakamototon@outlook.jp" target="_blank">sakamototon@outlook.jp</a><br />
       📷 Instagram: <a href="https://instagram.com/sakamoto_photo122" target="_blank">@sakamoto_photo122</a><br />
       🌐 Web: https://sakamototon.github.io/SakamotoTonPhoto/
     </p>
