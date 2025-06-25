@@ -3,16 +3,106 @@
 <head>
   <meta charset="UTF-8" />
   <title>坂本日記ブログ</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  <!-- フォント -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap" rel="stylesheet" />
+  
+  <style>
+    /* 基本設定 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Serif', serif;
+      background-color: #f5f7f9;
+      color: #1e1e1e;
+      line-height: 1.8;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    header {
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 24px;
+      margin-bottom: 48px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.6rem;
+      color: #1e1e1e;
+      letter-spacing: 0.05em;
+    }
+
+    nav {
+      margin-top: 18px;
+    }
+
+    nav .btn {
+      display: inline-block;
+      text-decoration: none;
+      color: #fff;
+      background-color: #333;
+      padding: 10px 26px;
+      border-radius: 24px;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    nav .btn:hover {
+      background-color: #000;
+    }
+
+    main {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 36px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+    }
+
+    .post-list {
+      list-style: none;
+    }
+
+    .post-list li {
+      margin-bottom: 22px;
+      font-size: 1.25rem;
+    }
+
+    .post-list a {
+      color: #1e1e1e;
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 3px;
+      transition: border-color 0.3s ease;
+    }
+
+    .post-list a:hover {
+      border-color: #555;
+    }
+
+    footer {
+      text-align: center;
+      color: #777;
+      font-size: 0.9rem;
+      margin-top: 60px;
+      letter-spacing: 0.03em;
+    }
+  </style>
 </head>
 <body>
   <header>
     <h1>坂本日記ブログ</h1>
-    <nav><a href="index.html">トップページへ戻る</a></nav>
+    <nav><a href="index.html" class="btn">トップページへ戻る</a></nav>
   </header>
   <main>
-    <ul>
-      <li><a href="2025-06-25-my-first-post.html">My First Post - 2025-06-25</a></li>
+    <ul class="post-list">
+      <li><a href="2025-06-25-my-new-post.html">はじめまして。 2025-06-25</a></li>
       <!-- 新しい記事はここに追加 -->
     </ul>
   </main>
