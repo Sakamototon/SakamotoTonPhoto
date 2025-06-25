@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ポートフォリオ - 坂本トン</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: #f4f4f8;
+      color: #333;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
+
+    a.back {
+      display: block;
+      margin: 2rem auto;
+      text-align: center;
+      color: #3498db;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>ポートフォリオ</h1>
+  <div class="gallery">
+    <img src="Leaf_Tokyo_Shibuya_Hikawa_Shrine.png" alt="Leaf" />
+    <img src="Enoshima_Pic.png" alt="Enoshima" />
+    <img src="Enoshima_Cat.png" alt="Cat" />
+<img src="Kyoto_something.jpg" alt="Ebisu" />
+<img src="Kyoto_Street.jpg" alt="kyoto Street" />
+<img src="Kamakura_Street.png" alt="kamakura street" />
+    <!-- ここに写真をどんどん追加可能 -->
+  </div>
+  <a href="index.html" class="back">← トップに戻る</a>
+</body>
+</html>

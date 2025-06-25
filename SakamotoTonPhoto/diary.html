@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>日記管理ページ</title>
+  <style>
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      max-width: 640px;
+      margin: 2rem auto;
+      padding: 1rem 2rem;
+      background-color: #fefefe;
+      border-radius: 10px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #34495e;
+    }
+    #postForm textarea {
+      width: 100%;
+      height: 120px;
+      padding: 0.8rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      resize: vertical;
+    }
+    #postForm button {
+      margin-top: 1rem;
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1rem;
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #postForm button:hover {
+      background-color: #1e8449;
+    }
+    #posts {
+      margin-top: 2rem;
+      border-top: 1px solid #ddd;
+      padding-top: 1rem;
+    }
+    .post {
+      background: #ecf0f1;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      position: relative;
+    }
+    .post button.delete-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background-color: #e74c3c;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .post button.delete-btn:hover {
+      background-color: #c0392b;
+    }
+    .comments-container {
+      margin-top: 1rem;
+      background: #dfe6e9;
+      padding: 0.8rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+    }
+    .comment {
+      margin-bottom: 0.6rem;
+      padding: 0.4rem 0.6rem;
+      background: #bdc3c7;
+      border-radius: 4px;
+    }
+    .logout-btn {
+      display: block;
+      margin: 1rem auto 2rem auto;
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1rem;
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      max-width: 200px;
+    }
+    .logout-btn:hover {
+      background-color: #c0392b;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>管理者用 日記投稿・閲覧ページ</h1>
+  <button class="logout-btn" onclick="logout()">ログアウト</button>
+
+  <form id="postForm" onsubmit="postDiary(event)">
+    <textarea id="diaryContent" placeholder="ここに日記を書いてください..." required></textarea>
+    <button type="submit">投稿する</button>
+  </form>
+
+  <section id="posts">
+    <h2>過去の日記</h2>
+    <div id="postsList"></div>
+  </section>
+
+  <script>
+    // URLパラメータ取得
+    const params = new URLSearchParams(location.search);
+    const mode = params.get('mode');
+    const user = params.get('user');
+
+    // 管理者以外は閲覧専用ページにリダイレクト
+    if (mode !== 'admin' || user !== 'sakamototon') {
+      alert('管理者権限がありません。閲覧専用ページへ移動します。');
+      location.href = 'readonly.html';
+    }
+
+    const POSTS_KEY = 'diary_posts';
+    const COMMENTS_KEY = 'diary_comments';
+    const POST_ID_KEY = 'diary_post_id_counter'; // 投稿IDのカウンター用
+
+    // 過去投稿をlocalStorageから読み込み
+    function loadPosts() {
+      const raw = localStorage.getItem(POSTS_KEY);
+      if (!raw) return [];
+      return JSON.parse(raw);
+    }
+
+    // 投稿を保存
+    function savePosts(posts) {
+      localStorage.setItem(POSTS_KEY, JSON.stringify(posts));
+    }
+
+    // コメントを読み込み
+    function loadComments() {
+      const raw = localStorage.getItem(COMMENTS_KEY);
+      if (!raw) return [];
+      return JSON.parse(raw);
+    }
+
+    // コメントを保存
+    function saveComments(comments) {
+      localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments));
+    }
+
+    // 投稿IDカウンターの読み込み
+    function loadPostIdCounter() {
+      const raw = localStorage.getItem(POST_ID_KEY);
+      return raw ? parseInt(raw, 10) : 0;
+    }
+
+    // 投稿IDカウンターの保存
+    function savePostIdCounter(id) {
+      localStorage.setItem(POST_ID_KEY, id.toString());
+    }
+
+    // 投稿表示
+    function renderPosts() {
+      const posts = loadPosts();
+      const comments = loadComments();
+      const container = document.getElementById('postsList');
+      container.innerHTML = '';
+
+      if (posts.length === 0) {
+        container.textContent = 'まだ投稿がありません。';
+        return;
+      }
+
+      // 投稿を新しい順に表示
+      posts.slice().reverse().forEach(post => {
+        const div = document.createElement('div');
+        div.className = 'post';
+
+        // 投稿ヘッダー
+        const postHeader = document.createElement('div');
+        postHeader.textContent = `[${post.date}] ${post.user}:`;
+        postHeader.style.fontWeight = 'bold';
+
+        // 投稿内容
+        const postContent = document.createElement('div');
+        postContent.textContent = post.content;
+        postContent.style.marginTop = '0.4rem';
+
+        // 削除ボタン
+        const btn = document.createElement('button');
+        btn.textContent = '削除';
+        btn.className = 'delete-btn';
+        btn.onclick = () => deletePost(post.id);
+
+        div.appendChild(postHeader);
+        div.appendChild(postContent);
+        div.appendChild(btn);
+
+        // この投稿に紐づくコメント表示
+        const relatedComments = comments.filter(c => c.postId === post.id);
+
+        const commentsContainer = document.createElement('div');
+        commentsContainer.className = 'comments-container';
+
+        if (relatedComments.length === 0) {
+          commentsContainer.textContent = 'コメントはまだありません。';
+        } else {
+          relatedComments.forEach(comment => {
+            const cdiv = document.createElement('div');
+            cdiv.className = 'comment';
+            cdiv.textContent = `[${comment.date}] ${comment.user}:\n${comment.content}`;
+            commentsContainer.appendChild(cdiv);
+          });
+        }
+
+        div.appendChild(commentsContainer);
+        container.appendChild(div);
+      });
+    }
+
+    // 投稿削除（IDで特定）
+    function deletePost(postId) {
+      if (!confirm('この投稿と付随するコメントを削除しますか？')) return;
+
+      // 投稿削除
+      let posts = loadPosts();
+      posts = posts.filter(post => post.id !== postId);
+      savePosts(posts);
+
+      // コメント削除
+      let comments = loadComments();
+      comments = comments.filter(comment => comment.postId !== postId);
+      saveComments(comments);
+
+      renderPosts();
+    }
+
+    // 投稿処理
+    function postDiary(event) {
+      event.preventDefault();
+
+      const content = document.getElementById('diaryContent').value.trim();
+      if (!content) {
+        alert('内容を入力してください。');
+        return;
+      }
+
+      const posts = loadPosts();
+      const dateStr = new Date().toLocaleString();
+
+      // 投稿IDカウンターを取得してインクリメント
+      let currentId = loadPostIdCounter();
+      currentId++;
+      savePostIdCounter(currentId);
+
+      posts.push({
+        id: currentId,
+        user: user,
+        date: dateStr,
+        content: content
+      });
+
+      savePosts(posts);
+      document.getElementById('diaryContent').value = '';
+      renderPosts();
+    }
+
+    // ログアウト処理
+    function logout() {
+      location.href = 'login.html';
+    }
+
+    // 初回表示
+    renderPosts();
+
+  </script>
+</body>
+</html>
