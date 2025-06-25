@@ -65,6 +65,22 @@
       box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
     }
 
+    .breadcrumb {
+      font-size: 0.8rem;
+      margin-top: 40px;
+      color: #aaa;
+      text-align: right;
+    }
+
+    .breadcrumb a {
+      color: #888;
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
     .post-list {
       list-style: none;
     }
@@ -103,8 +119,14 @@
   <main>
     <ul class="post-list">
       <li><a href="2025-06-25-my-new-post.html">はじめまして。 2025-06-25</a></li>
+
       <!-- 新しい記事はここに追加 -->
     </ul>
+
+    <!-- パンくずリスト（下部に移動） -->
+    <div class="breadcrumb">
+      <a href="index.html">Home</a> &gt; <span>Blog</span>
+    </div>
   </main>
   <footer>
     <p>© 2025 坂本トン</p>
